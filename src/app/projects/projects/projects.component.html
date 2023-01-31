@@ -1,0 +1,83 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Created</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let project of projects$ | async">
+            <td>{{ project.id }}</td>
+            <td>{{ project.name }}</td>
+            <td>{{ project.created | date:'fullDate' }}</td>
+            <td>
+                <button class="btn btn-primary" (click)="openEditPopUp(project.id)">Edit</button>
+                <button class="btn btn-danger" (click)="openDeleteDialog(project.id)">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<button
+  style="margin: 50px; padding: 10px"
+  type="button"
+  class="btn btn-primary"
+  (click)="openPopup('new')">New Project
+</button>
+
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyle}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{dialogTitle}}</h4>
+      </div>
+      <div class="modal-body">
+        <form #newProjectForm="ngForm">
+            <label for="projectNameTxt" class="label">Project Name</label>
+            <input type="text" #projectNameInput="ngModel" name="projectName" [(ngModel)]="project.name" class="form-control" id="projectNameTxt"  required/>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="saveProject()" [disabled]="newProjectForm.invalid">
+            Save
+            </button>
+        <button type="button" class="btn btn-danger" 
+                (click)="closePopup()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleDelete}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Project?</h4>
+      </div>
+      <div class="modal-body">
+       <p>Are you sure you want to delete this Project?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteProject()">
+            Delete
+            </button>
+        <button type="button" class="btn btn-danger" 
+                (click)="closeDeleteDialog()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
